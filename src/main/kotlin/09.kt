@@ -1,7 +1,7 @@
-private val input = readFileAsLines("09.1.sample.txt")
+private val input = readFileAsLines("09.sample.txt")
 // private val input = readFileAsLines("09.txt")
 
-fun main(args: Array<String>) {
+fun main() {
     println(partOne(input))
     println(partTwo(input))
 }
