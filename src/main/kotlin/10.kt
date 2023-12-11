@@ -2,10 +2,10 @@
 private val input = readFileAsLines("10.txt")
 
 fun main() {
-    val pipeMap = mutableMapOf<Coordinate, Pipe>()
+    val pipeMap = mutableMapOf<PipeCoordinate, Pipe>()
     for ((i, line) in input.withIndex()) {
         for ((j, pipe) in line.withIndex()) {
-            pipeMap[Coordinate(j, i)] = Pipe(pipe, Coordinate(j, i))
+            pipeMap[PipeCoordinate(j, i)] = Pipe(pipe, PipeCoordinate(j, i))
         }
     }
 
@@ -13,9 +13,9 @@ fun main() {
     println(partTwo(pipeMap))
 }
 
-private fun partOne(pipeMap: MutableMap<Coordinate, Pipe>): Int {
+private fun partOne(pipeMap: MutableMap<PipeCoordinate, Pipe>): Int {
     var count = 0
-    
+
     var prevPipe = pipeMap.filterValues { it.type == 'S' }.values.first()
     var nextPipe = prevPipe.getNext(pipeMap)
 
@@ -30,7 +30,7 @@ private fun partOne(pipeMap: MutableMap<Coordinate, Pipe>): Int {
     return (count + 1) / 2
 }
 
-private fun partTwo(pipeMap: MutableMap<Coordinate, Pipe>): Int {
+private fun partTwo(pipeMap: MutableMap<PipeCoordinate, Pipe>): Int {
     var count2 = 0
 
     for (i in input.indices) {
@@ -38,7 +38,7 @@ private fun partTwo(pipeMap: MutableMap<Coordinate, Pipe>): Int {
         var wonkyLines = ""
         var numOfWonkyLines = 0
         for (j in 0 until input[0].length) {
-            val pipe = pipeMap.getValue(Coordinate(j, i))
+            val pipe = pipeMap.getValue(PipeCoordinate(j, i))
             if (pipe.loopEdge) {
                 if (pipe.type == '-') continue
                 if ("L7JFS".contains(pipe.type)) {
@@ -64,22 +64,22 @@ private fun partTwo(pipeMap: MutableMap<Coordinate, Pipe>): Int {
     return count2
 }
 
-data class Coordinate(val x: Int, val y: Int) {
-    fun nextCoordinate(toDirection: Direction): Coordinate {
+data class PipeCoordinate(val x: Int, val y: Int) {
+    fun nextCoordinate(toDirection: Direction): PipeCoordinate {
         return when (toDirection) {
-            Direction.LEFT -> Coordinate(this.x - 1, this.y)
-            Direction.RIGHT -> Coordinate(this.x + 1, this.y)
-            Direction.ABOVE -> Coordinate(this.x, this.y - 1)
-            Direction.BELOW -> Coordinate(this.x, this.y + 1)
+            Direction.LEFT -> PipeCoordinate(this.x - 1, this.y)
+            Direction.RIGHT -> PipeCoordinate(this.x + 1, this.y)
+            Direction.ABOVE -> PipeCoordinate(this.x, this.y - 1)
+            Direction.BELOW -> PipeCoordinate(this.x, this.y + 1)
         }
     }
 }
 
-class Pipe(var type: Char, private val position: Coordinate) {
+class Pipe(var type: Char, private val position: PipeCoordinate) {
 
     var loopEdge = false
 
-    private fun nextDirection(from: Direction): Coordinate {
+    private fun nextDirection(from: Direction): PipeCoordinate {
         val direction = when (this.type) {
             'J' -> if (from == Direction.ABOVE) Direction.LEFT else Direction.ABOVE
             'L' -> if (from == Direction.ABOVE) Direction.RIGHT else Direction.ABOVE
@@ -90,7 +90,7 @@ class Pipe(var type: Char, private val position: Coordinate) {
         return this.position.nextCoordinate(direction)
     }
 
-    fun getNextPipeCoordinate(prevPipe: Pipe): Coordinate {
+    fun getNextPipeCoordinate(prevPipe: Pipe): PipeCoordinate {
         val thisX = this.position.x
         val thisY = this.position.y
         val prevX = prevPipe.position.x
@@ -103,13 +103,13 @@ class Pipe(var type: Char, private val position: Coordinate) {
         return this.nextDirection(fromDirection)
     }
 
-    fun getNext(pipeMap: MutableMap<Coordinate, Pipe>): Pipe {
+    fun getNext(pipeMap: MutableMap<PipeCoordinate, Pipe>): Pipe {
         this.loopEdge = true
         val start = this.position
 
-        val right = pipeMap.getValue(Coordinate(start.x + 1, start.y))
-        val down = pipeMap.getValue(Coordinate(start.x, start.y + 1))
-        val left = pipeMap.getValue(Coordinate(start.x - 1, start.y))
+        val right = pipeMap.getValue(PipeCoordinate(start.x + 1, start.y))
+        val down = pipeMap.getValue(PipeCoordinate(start.x, start.y + 1))
+        val left = pipeMap.getValue(PipeCoordinate(start.x - 1, start.y))
 
         return if ("J7-".contains(right.type)) right
         else if ("JL|".contains(down.type)) down
