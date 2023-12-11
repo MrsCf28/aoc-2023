@@ -20,3 +20,15 @@ fun findLCM(a: Long, b: Long): Long {
     }
     return maxLcm
 }
+
+fun transpose(lists: List<List<Char>>): List<List<Char>> {
+    val transposedLists = mutableListOf<List<Char>>()
+    for (i in lists[0].indices) {
+        val transposedList = mutableListOf<Char>()
+        for (j in lists.indices) {
+            transposedList.add(lists[j][i])
+        }
+        transposedLists.add(transposedList.toList())
+    }
+    return transposedLists.toList()
+}
