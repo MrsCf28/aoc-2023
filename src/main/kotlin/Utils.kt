@@ -32,3 +32,8 @@ fun transpose(lists: List<List<Char>>): List<List<Char>> {
     }
     return transposedLists.toList()
 }
+
+fun nCr(n: Int, r: Int) = fact(n) / (fact(r) * fact(n - r))
+
+fun fact(n: Int): Int = if (n <= 1) 1 else n * fact(n - 1)
+
