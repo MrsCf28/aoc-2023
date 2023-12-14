@@ -15,7 +15,7 @@ private fun getSumOfLengths(spaceFactor: Long): Long {
     val galaxyList = input.map { it.toList() }
 
     val ySpaces = findSpaces(galaxyList)
-    val xSpaces = findSpaces(transpose(galaxyList))
+    val xSpaces = findSpaces(transposeChars(galaxyList))
 
     val galaxyMap = mutableListOf<Coordinate>()
     for (row in galaxyList.indices) {
